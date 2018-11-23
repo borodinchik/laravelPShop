@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,12 +22,9 @@ Route::group(['prefix' => 'category'], function ()
     Route::get('show_category_and_its_products', 'API\CategoryController@getCategoryAndItsProducts');
 
 });
-Route::post('product', 'API\ProductController@store');
 
-//Route::resource('product', 'API\ProductController');
+Route::resource('product', 'API\ProductController')->except('create', 'update', 'edit');
 Route::post('product/{id}', 'API\ProductController@update');
-
-
 
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');

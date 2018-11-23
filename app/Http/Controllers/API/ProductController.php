@@ -7,10 +7,17 @@ use App\Http\Requests\Product as ProductRequest;
 use App\Product;
 use App\Services\File;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
+
+    public function __construct(File $file)
+    {
+        $this->file = $file;
+    }
+
     /**
      * @param Product $product
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
@@ -22,16 +29,15 @@ class ProductController extends Controller
 
     /**
      * @param ProductRequest $request
-     * @param File $file
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(ProductRequest $request, File $file)
+    public function store(ProductRequest $request)
     {
         $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
         $product->category_id = (int)$request->category_id;
-        $product->img = $file->getFileName($request);
+        $product->img = $this->file->getFileName($request);
         $product->price = $request->price;
         $product->save();
 
@@ -53,19 +59,17 @@ class ProductController extends Controller
     }
 
     /**
-     * @param ProductRequest $request
+     * @param Request $request
      * @param $id
-     * @param Product $product
-     * @param File $file
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ProductRequest $request, $id,Product $product, File $file)
+    public function update(Request $request, $id)
     {
-        $product = $product->find($id);
+        $product = Product::find($id);
         if (!empty($product)) {
             $product->title = $request->title;
             $product->description = $request->description;
-            $product->img = $file->getFileName($request);
+            $product->img = $this->file->getFileName($request);
             $product->category_id = (int)$request->category_id;
             $product->price = $request->price;
             $product->update();
