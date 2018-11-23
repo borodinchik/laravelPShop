@@ -24,10 +24,7 @@ Route::group(['prefix' => 'category'], function ()
 
 });
 
-Route::group(['prefix' => 'product'], function ()
-{
-    //
-});
+Route::resource('product', 'API\ProductController');
 
 
 Route::post('login', 'API\UserController@login');
