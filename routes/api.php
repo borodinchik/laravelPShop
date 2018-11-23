@@ -21,6 +21,7 @@ Route::group(['prefix' => 'category'], function ()
     Route::post('add_new','API\CategoryController@addCategory');
     Route::get('tree_show', 'API\CategoryController@showChildAndParentsCategoriesTree');
     Route::get('show_list', 'API\CategoryController@showCategoriesList');
+    Route::get('show_category_and_its_products', 'API\CategoryController@getCategoryAndItsProducts');
 
 });
 
