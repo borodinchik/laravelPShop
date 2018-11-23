@@ -11,7 +11,7 @@ namespace App\Services;
 
 class File
 {
-    public function getFulleName($request)
+    public function getFullName($request)
     {
         if ($request->hasFile('img')) {
             $file = $request->file('img');

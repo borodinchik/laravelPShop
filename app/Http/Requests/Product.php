@@ -26,9 +26,9 @@ class Product extends FormRequest
         return [
             'title' => 'required|max:255',
             'description' => 'required',
-            'category_id' => 'required',
-            'img' => 'required',
-            'price' => 'required'
+            'category_id' => 'required|numeric',
+            'img' => 'required|mimes:jpeg,jpg,png|max:1000\'',
+            'price' => 'required|numeric'
         ];
     }
 }

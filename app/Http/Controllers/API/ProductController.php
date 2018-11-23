@@ -6,7 +6,6 @@ use App\Http\Resources\Product as ProductResource;
 use App\Http\Requests\Product as ProductRequest;
 use App\Product;
 use App\Services\File;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
@@ -22,23 +21,21 @@ class ProductController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ProductRequest $request
      * @param File $file
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, File $file)
+    public function store(ProductRequest $request, File $file)
     {
-
-        $fileName = $file->getFulleName($request);
         $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
         $product->category_id = (int)$request->category_id;
-        $product->img = $fileName;
+        $product->img = $file->getFullName($request);
         $product->price = $request->price;
         $product->save();
 
-        return response()->json('New Product Created Successful',
+        return response()->json(['massage' => 'New Product Created Successful'],
             Response::HTTP_CREATED);
     }
 
@@ -48,30 +45,39 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-            $currenttProduct = new ProductResource($product);
+            $currentProduct = new ProductResource($product);
             return response()->json(
                 [
-                    'data' => $currenttProduct
+                    'data' => $currentProduct
                 ], Response::HTTP_OK);
     }
 
     /**
-     * @param Request $request
+     * @param ProductRequest $request
+     * @param $id
      * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, $id,Product $product)
     {
-        //
+        $productId = $product->find($id);
+        $productId->update($request->all());
+
+        return response()->json(
+            [
+                'massage' => 'Product Updated!'
+            ], Response::HTTP_CREATED
+        );
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }
