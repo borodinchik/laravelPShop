@@ -24,8 +24,11 @@ Route::group(['prefix' => 'category'], function ()
     Route::get('show_category_and_its_products', 'API\CategoryController@getCategoryAndItsProducts');
 
 });
+Route::post('product', 'API\ProductController@store');
 
-Route::resource('product', 'API\ProductController');
+//Route::resource('product', 'API\ProductController');
+Route::post('product/{id}', 'API\ProductController@update');
+
 
 
 Route::post('login', 'API\UserController@login');

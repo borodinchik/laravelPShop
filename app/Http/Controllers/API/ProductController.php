@@ -31,7 +31,7 @@ class ProductController extends Controller
         $product->title = $request->title;
         $product->description = $request->description;
         $product->category_id = (int)$request->category_id;
-        $product->img = $file->getFullName($request);
+        $product->img = $file->getFileName($request);
         $product->price = $request->price;
         $product->save();
 
@@ -56,16 +56,24 @@ class ProductController extends Controller
      * @param ProductRequest $request
      * @param $id
      * @param Product $product
+     * @param File $file
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ProductRequest $request, $id,Product $product)
+    public function update(ProductRequest $request, $id,Product $product, File $file)
     {
-        $productId = $product->find($id);
-        $productId->update($request->all());
+        $product = $product->find($id);
+        if (!empty($product)) {
+            $product->title = $request->title;
+            $product->description = $request->description;
+            $product->img = $file->getFileName($request);
+            $product->category_id = (int)$request->category_id;
+            $product->price = $request->price;
+            $product->update();
+        }
 
         return response()->json(
             [
-                'massage' => 'Product Updated!'
+                'massage' => "Product id = {$id} Updated!"
             ], Response::HTTP_CREATED
         );
     }
