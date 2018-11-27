@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Category;
+use App\Http\Resources\CategoryProduct;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,12 @@ use App\Http\Resources\Category as CategoryResource;
 
 class CategoryController extends Controller
 {
+//    public function __construct()
+//    {
+//        $this->middleware('auth')
+//            ->except('showChildAndParentsCategoriesTree', 'getCategoryAndItsProducts', 'showCategoriesList');
+//    }
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -28,7 +35,7 @@ class CategoryController extends Controller
     public function showCategoriesList()
     {
         $list = Category::pluck('name', 'id')->all();
-        return \response()->json(
+        return response()->json(
             [
                 'categories_list' => $list
             ], Response::HTTP_OK);
@@ -48,7 +55,7 @@ class CategoryController extends Controller
         $input['parent_id'] = empty($input['parent_id']) ? 0 : $input['parent_id'];
 
         Category::create($input);
-        return response()->json(['success' => 'New Category added successfully.']);
+        return response()->json(['success' => 'New Category added successfully.'], Response::HTTP_CREATED);
     }
 
     /**
@@ -56,7 +63,7 @@ class CategoryController extends Controller
      */
     public function getCategoryAndItsProducts()
     {
-        $data = Category::with('products')->paginate(10);
-        return response()->json($data, Response::HTTP_OK);
+        $data = Category::with('products')->get();
+        return response()->json(CategoryProduct::collection($data), Response::HTTP_OK);
     }
 }

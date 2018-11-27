@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'email' => 'admin@gmail.com',
-                'password' => '12345678'
+                'password' => \Illuminate\Support\Facades\Hash::make('12345678')
             ]
         );
     }

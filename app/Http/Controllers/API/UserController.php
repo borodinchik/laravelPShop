@@ -64,12 +64,4 @@ class UserController extends Controller
         $user = Auth::user();
         return response()->json(['success' => $user], Response::HTTP_OK);
     }
-
-//    public function tests()
-//    {
-//        $array = [['Same value1'],['same Value 2']];
-//        $arrayBody = [['Same value one'],['Same value two']];
-//       $result = file_put_contents('./log.log', [json_encode($array). "\n"  . json_encode($arrayBody) . "\n". date('Y-m-d H:i:s') . "\n" . get_class() . "\n" . __FUNCTION__ . "\n\n"],FILE_APPEND);
-//       return $result;
-//    }
 }
